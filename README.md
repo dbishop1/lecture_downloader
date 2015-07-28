@@ -1,2 +1,3 @@
 # lecture_downloader
-Download lecture notes from CECS public site.
+
+Just a little script I hacked together to download lecture notes from the CECS public site.
