@@ -1,18 +1,22 @@
-arr=( $(wget -d -r -np -N --spider -e robots=off --no-check-certificate \
-  https://cs.anu.edu.au/student/comp4610/notes/ \
-  2>&1 | grep " -> " | grep -Ev "\/\?C=" | sed "s/.* -> //" | grep ".pdf" | uniq))
+#download the index file
+wget --quiet --no-remove-listing http://cs.anu.edu.au/student/comp4610/notes/  
 
+#check that file exists
+if [ ! -f index.html ]; then
+    echo "File not found!"
+else
+    
+    #add all pdf file names to an array
+    arr=($(cat index.html | grep -o -P '(?<=HREF=).*(?=.pdf)' | cut -d'"' -f 2))
 
-echo ${arr[@]}
+    #download the file if it doesn't already exist
+    for i in ${arr[@]}; do
+        url="http://cs.anu.edu.au/student/comp4610/notes/$i"
+        if [ ! -f $i ]; then
+            echo "Downloading $i"
+            wget --quiet $url
+        fi
+    done
+fi
 
-for i in ${arr[@]}; do
-    a=$(basename $i)
-    if [ ! -f $a ]; then
-        echo "$a not found! Downloading File"
-        wget $i
-    else
-        echo "$a already exists" 
-    fi
-done
-mv *.pdf lecture_notes/
-rm -rf cs.anu.edu.au/
+rm index.html
