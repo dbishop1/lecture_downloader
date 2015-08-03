@@ -9,14 +9,20 @@ else
     #add all pdf file names to an array
     arr=($(cat index.html | grep -o -P '(?<=HREF=).*(?=.pdf)' | cut -d'"' -f 2))
 
+    no_files_downloaded=1    
+
     #download the file if it doesn't already exist
     for i in ${arr[@]}; do
         url="http://cs.anu.edu.au/student/comp4610/notes/$i"
         if [ ! -f $i ]; then
+            no_files_downloaded=0
             echo "Downloading $i"
             wget --quiet $url
         fi
     done
+    if [ $no_files_downloaded -eq 1 ]; then
+        echo "No files downloaded"
+    fi
 fi
 
 rm index.html
