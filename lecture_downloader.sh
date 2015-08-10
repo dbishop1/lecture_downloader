@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 #download directory
 dest=/home/darren/Documents/comp4610/lecture_notes/
 
