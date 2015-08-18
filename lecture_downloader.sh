@@ -31,3 +31,15 @@ else
 fi
 
 rm index.html
+
+file=($(ls -t $dest | head -n 1))
+echo "Would you like to open "$file"? [y/n]"
+read open
+
+if [ "$open" == "y" ]; then
+    fullfilepath=$dest$file
+    google-chrome $fullfilepath
+fi
+
+
+
